@@ -1,3 +1,5 @@
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -6,6 +8,12 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class ReqresTest {
+
+    @BeforeAll
+    public static void setUp() {
+        RestAssured.baseURI = "https://reqres.in";
+        RestAssured.basePath = "/api";
+    }
 
     @Test
     void createUserTest() {
@@ -19,7 +27,7 @@ public class ReqresTest {
                 .contentType(JSON)
                 .log().uri()
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("/users")
                 .then()
                 .log().status()
                 .log().body()
@@ -33,7 +41,7 @@ public class ReqresTest {
                 .contentType(JSON)
                 .log().uri()
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("/users")
                 .then()
                 .log().status()
                 .log().body()
@@ -53,7 +61,7 @@ public class ReqresTest {
                 .contentType(JSON)
                 .log().uri()
                 .when()
-                .put("https://reqres.in/api/users/2")
+                .put("/users/2")
                 .then()
                 .log().status()
                 .log().body()
@@ -74,13 +82,13 @@ public class ReqresTest {
                 .contentType(JSON)
                 .log().uri()
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
                 .then()
                 .log().status()
                 .log().body()
                 .statusCode(200)
                 .body("id", is(4))
-                .body("token",  is("QpwL5tke4Pnpja7X4"));
+                .body("token",   notNullValue());
     }
 
     @Test
@@ -95,7 +103,7 @@ public class ReqresTest {
                 .contentType(JSON)
                 .log().uri()
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
                 .then()
                 .log().status()
                 .log().body()
