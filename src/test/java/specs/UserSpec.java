@@ -16,11 +16,12 @@ public class UserSpec {
         return new RequestSpecBuilder()
                 .addFilter(withCustomTemplates())
                 .setContentType(JSON)
+                .addHeader("x-api-key", "reqres-free-v1")
                 .setBasePath(basePath)
                 .build()
                 .log().uri()
                 .log().body()
-                .log().headers();// Устанавливаем basePath из аргумента
+                .log().headers();
     }
 
     public static ResponseSpecification userResponseSpec(Integer statusCode) {

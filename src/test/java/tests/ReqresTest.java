@@ -1,8 +1,8 @@
 package tests;
 
 import io.restassured.RestAssured;
-import model.UserResponseModel;
-import model.UserModel;
+import models.UserResponseModel;
+import models.UserModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,8 +34,10 @@ public class ReqresTest {
         Integer statusCode = 201;
         userData.setName("morpheus");
         userData.setJob("leader");
+
         UserResponseModel response = step("Make request", () ->
                 given(userRequestSpec(basePath))
+
                         .body(userData)
                         .when()
                         .post()

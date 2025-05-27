@@ -1,14 +1,13 @@
-package model;
+package models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class UserResponseModel {
+public class UserModel {
+    String name;
     String job;
-    String error;
-    String updatedAt;
-    String token;
-    Integer id;
+    String email;
+    String password;
 }
