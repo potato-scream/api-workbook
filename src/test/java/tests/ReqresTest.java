@@ -1,10 +1,9 @@
 package tests;
 
 import io.restassured.RestAssured;
-import models.UserResponseModel;
 import models.UserModel;
+import models.UserResponseModel;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
@@ -18,20 +17,13 @@ public class ReqresTest {
 
     @BeforeAll
     public static void setUp() {
-        RestAssured.baseURI = "https://reqres.in";
-    }
-
-    private UserModel userData;
-
-    @BeforeEach
-    void setup() {
-        userData = new UserModel();
+        RestAssured.baseURI = "https://reqres.in/api";
     }
 
     @Test
     void createUserTest() {
-        String basePath = "/api/users";
-        Integer statusCode = 201;
+        String basePath = "/users";
+        UserModel userData = new UserModel();
         userData.setName("morpheus");
         userData.setJob("leader");
 
@@ -42,7 +34,7 @@ public class ReqresTest {
                         .when()
                         .post()
                         .then()
-                        .spec(userResponseSpec(statusCode))
+                        .spec(userResponseSpec(201))
                         .extract().as(UserResponseModel.class));
         step("Check response", () ->
                 assertNotNull(response.getId()));
@@ -50,14 +42,13 @@ public class ReqresTest {
 
     @Test
     void createUserWithNoUserDataTest() {
-        String basePath = "/api/users";
-        Integer statusCode = 201;
+        String basePath = "/users";
         UserResponseModel response = step("Make request", () ->
                 given(userRequestSpec(basePath))
                         .when()
                         .post()
                         .then()
-                        .spec(userResponseSpec(statusCode))
+                        .spec(userResponseSpec(201))
                         .extract().as(UserResponseModel.class));
         step("Check response", () ->
                 assertNotNull(response.getId()));
@@ -65,8 +56,8 @@ public class ReqresTest {
 
     @Test
     void updateUserTest() {
-        String basePath = "/api/users/2";
-        Integer statusCode = 200;
+        String basePath = "/users/2";
+        UserModel userData = new UserModel();
         userData.setName("morpheus");
         userData.setJob("bloger");
         UserResponseModel response = step("Make request", () ->
@@ -75,7 +66,7 @@ public class ReqresTest {
                         .when()
                         .put()
                         .then()
-                        .spec(userResponseSpec(statusCode))
+                        .spec(userResponseSpec(200))
                         .extract().as(UserResponseModel.class));
         step("Check response", () ->
                 assertNotNull(response.getUpdatedAt()));
@@ -84,8 +75,8 @@ public class ReqresTest {
 
     @Test
     void registerUserTest() {
-        String basePath = "/api/register";
-        Integer statusCode = 200;
+        String basePath = "/register";
+        UserModel userData = new UserModel();
         userData.setEmail("eve.holt@reqres.in");
         userData.setPassword("bloger");
         UserResponseModel response = step("Make request", () ->
@@ -94,7 +85,7 @@ public class ReqresTest {
                         .when()
                         .post()
                         .then()
-                        .spec(userResponseSpec(statusCode))
+                        .spec(userResponseSpec(200))
                         .extract().as(UserResponseModel.class));
         step("Check response", () ->
                 assertNotNull(response.getToken()));
@@ -103,8 +94,8 @@ public class ReqresTest {
 
     @Test
     void registerUserWithoutPasswordTest() {
-        String basePath = "/api/register";
-        Integer statusCode = 400;
+        String basePath = "/register";
+        UserModel userData = new UserModel();
         userData.setEmail("eve.holt@reqres.in");
         userData.setPassword("");
         UserResponseModel response = step("Make request", () ->
@@ -113,7 +104,7 @@ public class ReqresTest {
                         .when()
                         .post()
                         .then()
-                        .spec(userResponseSpec(statusCode))
+                        .spec(userResponseSpec(400))
                         .extract().as(UserResponseModel.class));
         step("Check response", () ->
                 assertEquals("Missing password", response.getError()));
